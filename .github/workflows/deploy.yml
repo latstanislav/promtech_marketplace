@@ -36,7 +36,7 @@ jobs:
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /home/${{ secrets.VM_USER }}/app
+            cd ~/tm_app
             gcloud auth configure-docker europe-west3-docker.pkg.dev -q
             docker compose pull market_frontend
             docker compose up -d market_frontend
