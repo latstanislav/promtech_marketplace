@@ -44,6 +44,9 @@ jobs:
 
       - name: Deploy on VM
         uses: appleboy/ssh-action@v1.0.3
+        env: # Переменные объявляются ЗДЕСЬ (на уровне шага)
+          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          #GCP_PROJECT_NAME: ${{ secrets.GCP_PROJECT_NAME }}
         with:
           host: ${{ secrets.VM_IP }}
           username: ${{ secrets.VM_USER }}
@@ -56,7 +59,5 @@ jobs:
             docker compose pull 
             docker compose up -d
             docker image prune -f
-          env:
-          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-          GCP_PROJECT_NAME: ${{ secrets.GCP_PROJECT_NAME }}
+
             
