@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  market_frontend:
+    image: europe-west3-docker.pkg.dev/${GCP_PROJECT_ID}/${GCP_PROJECT_NAME}/frontend:latest
+    restart: unless-stopped
+    #networks: [app_network]
+    ports:
+      - "80:80"
+
+#networks:
+#  app_network:
+#    external: true
