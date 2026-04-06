@@ -24,10 +24,23 @@ jobs:
       - name: Configure Docker
         run: gcloud auth configure-docker europe-west3-docker.pkg.dev
 
+      
       - name: Build and Push Frontend Image
         run: |
-          docker build -t europe-west3-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/market-service-app/frontend:latest -f Dockerfile_market_frontend .
+          docker build \
+            --build-arg VITE_API_BASE_URL=http://${{ secrets.VM_IP }}:4242 \
+            -t europe-west3-docker.pkg.dev/.../frontend:latest \
+            -f Dockerfile_market_frontend .
           docker push europe-west3-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/market-service-app/frontend:latest
+      
+      - name: Copy docker-compose to VM
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.VM_IP }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "docker-compose.yml"
+          target: "/home/${{ secrets.VM_USER }}/tm_frontend/"
 
       - name: Deploy on VM
         uses: appleboy/ssh-action@v1.0.3
@@ -36,8 +49,9 @@ jobs:
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd ~/tm_app
+            set -e
+            cd /home/${{ secrets.VM_USER }}/tm_frontend
             gcloud auth configure-docker europe-west3-docker.pkg.dev -q
-            docker compose pull market_frontend
-            docker compose up -d market_frontend
+            docker compose pull 
+            docker compose up -d
             docker image prune -f
