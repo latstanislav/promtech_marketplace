@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ProductCard, ProductModal } from '../views';
+import { ProductCard, ProductModal, RelatedProducts } from '../views';
 import { ShopPresenter } from '../presenters';
 import { useAppDispatch, useAppSelector } from '../store';
 import { searchProducts, resetFilters } from '../store';
@@ -177,6 +177,12 @@ export const ShopPage: React.FC<ShopPageProps> = ({ categories, onLoginRequired 
           </div>
         )}
       </main>
+      <RelatedProducts
+        products={searchState.products}
+        currentProducts={searchState.filteredProducts}
+        searchQuery={searchState.searchQuery}
+        onProductClick={handleCardClick}
+      />
       <ProductModal
         product={selectedProduct}
         isOpen={isProductModalOpen}
