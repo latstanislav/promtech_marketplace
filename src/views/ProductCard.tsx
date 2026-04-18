@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Product } from '../models';
 import { Heart, GitCompare } from 'lucide-react';
+import { useAuth } from '../hooks';
 import '../styles/components/ProductCard.scss';
 
 interface ProductCardProps {
@@ -22,6 +23,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   isFavorite = false,
   isInCompare = false
 }) => {
+  const { isLoggedIn } = useAuth();
   const [showTooltip, setShowTooltip] = useState<{ favorite: boolean; compare: boolean }>({
     favorite: false,
     compare: false
@@ -67,15 +69,16 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         </button>
         
         <button
-          className={`action-icon compare-icon ${isInCompare ? 'active' : ''}`}
+          className={`action-icon compare-icon ${isInCompare ? 'active' : ''} ${!isLoggedIn ? 'disabled' : ''}`}
           onClick={handleCompareClick}
           onMouseEnter={() => setShowTooltip({ ...showTooltip, compare: true })}
           onMouseLeave={() => setShowTooltip({ ...showTooltip, compare: false })}
           aria-label="Добавить к сравнению"
+          disabled={!isLoggedIn}
         >
           <GitCompare size={20} />
           {showTooltip.compare && (
-            <span className="tooltip">Добавить к сравнению</span>
+            <span className="tooltip">{isLoggedIn ? 'Добавить к сравнению' : 'Войдите для сравнения'}</span>
           )}
         </button>
       </div>
