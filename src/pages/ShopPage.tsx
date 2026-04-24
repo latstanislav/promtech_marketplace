@@ -79,6 +79,12 @@ export const ShopPage: React.FC<ShopPageProps> = ({ categories, onLoginRequired 
 
   return (
     <div className="main-content">
+      <RelatedProducts
+        products={searchState.products}
+        currentProducts={searchState.filteredProducts}
+        searchQuery={searchState.searchQuery}
+        onProductClick={handleCardClick}
+      />
       <main className="shop-main">
         <div className="shop-header">
           <button 
@@ -177,12 +183,6 @@ export const ShopPage: React.FC<ShopPageProps> = ({ categories, onLoginRequired 
           </div>
         )}
       </main>
-      <RelatedProducts
-        products={searchState.products}
-        currentProducts={searchState.filteredProducts}
-        searchQuery={searchState.searchQuery}
-        onProductClick={handleCardClick}
-      />
       <ProductModal
         product={selectedProduct}
         isOpen={isProductModalOpen}

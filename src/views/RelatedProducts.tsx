@@ -82,11 +82,10 @@ export const RelatedProducts: React.FC<RelatedProductsProps> = ({
   // Проверяем, есть ли что показывать
   const hasRelatedProducts = Object.keys(groupedRelated).length > 0;
   
-  if (!searchQuery && currentCategories.length === 0) {
-    return null;
-  }
+  // Показываем только если есть поисковый запрос или фильтрация, и есть сопутствующие товары
+  const isFiltering = searchQuery || currentProducts.length !== products.length;
   
-  if (!hasRelatedProducts) {
+  if (!isFiltering || !hasRelatedProducts) {
     return null;
   }
 
